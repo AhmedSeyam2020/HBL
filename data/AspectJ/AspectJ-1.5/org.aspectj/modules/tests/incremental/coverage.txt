@@ -1,0 +1,111 @@
+This document describes the set of tests we need to build to have complete coverage
+of incremental compilation for AspectJ. 
+
+Please add additional test descriptions if you uncover basic scenarios that are missing.
+
+ -- work-in-progress...
+ -- Adrian Colyer, 12-05-2006
+ 
+ Types referred to in test specifications:
+ ==========================================
+ 
+ For the test descriptions that follow I assume a set of types with the following
+ relationships:
+ 
+ "Aspect" is an aspect
+ "AbstractAspect" is the parent of "ConcreteAspect"
+ "AspectDelegate" is a type called from within the body of the aspect
+ 
+ "Class" is any class
+ "SuperClass" is the parent of ....
+ "SubClass"
+ 
+ "ClassDelegate" is a type called from within Class, SuperClass, SubClass
+ 
+ Simple Changes to Class
+ =======================
+ 
+ Class is advised by Aspect (both advice + ITD member(s)).
+ 
+ INC-01 Change method signature in Class so that method that was previously unadvised now is. Structure model should
+        update *all* markers for the Class with the new line numbers, and add new marker (both advised and advised-by)
+        Expect 1xcompile, 1xincremental weave
+        
+ INC-02 As above, but change signature so that previously advised member is no longer advised.
+ 
+ INC-03 Change a method that was advised, and remains advised after change - check line no's updated for relationships
+   
+ INC-04 Implement an additional interface in the Class, so that advice now matches
+ 
+ INC-05 Add interface to Class, causing declare parents to match where it did not previously
+ 
+ INC-06 As above but remove interface
+ 
+ INC-07 Whitespace change in class with declare warning markers
+
+ INC-08 Add interface X to Class, so that a declare parents now matches, adding additional interface Y.
+        Another aspect in the system advises all calls to "foo" on instances of Y. Class has a foo method - 
+        all types that call Class.foo should be rewoven. 
+ 
+ Simple Changes to Aspect
+ ========================
+ 
+ Class is advised by Aspect.
+ 
+ INC-11 Whitespace change in an aspect
+ 
+ INC-12 Add method to an aspect
+ 
+ INC-13 Change body of before advice
+ 
+ INC-14 Change pointcut expression
+ 
+ INC-15 Change body of around advice
+ 
+ INC-16 Add new advice to aspect
+ 
+ INC-17 Add new declare parents statement to aspect
+ 
+ INC-18 Change declare parents statement
+ 
+ Hierarchical Class Changes
+ ==========================
+ 
+ INC-20 Add interface to SuperClass such that operations in SubClass now become eligible for advising
+ 
+ INC-21 Add method to SuperClass such that (now overridding) method in SubClass becomes eligible for advising
+ 
+ INC-22 Add method to SuperClass with same signature as one ITD'd on an interface implemented by SubClass
+ 
+ Hierarchical Aspect Changes
+ ===========================
+ 
+ INC-30 Change advice body in abstract aspect
+
+ INC-31 Change comment in abstract aspect
+ 
+ Delegate tests
+ ===============
+ 
+ INC-40 Change signature of operation in ClassDelegate, Class should be recompiled and re-woven
+  
+ INC-41 Change signature of operation in AspectDelegate, aspect should be recompiled and world re-woven  
+  
+ Cflow tests
+ ============
+ 
+ INC-50 A simple cflow is started by a join point in class Start and used in join point matching in Class. 
+        Compile Class, Start, and Aspect. Change Start to remove the join point that starts the cflow.
+
+ INC-51 As above, but make a white-space change in Aspect
+ 
+ INC-52 As INC-50, but change Class
+ 
+ INC-53 As 50, but cflow binds a context variable
+ 
+ INC-54 As above, but make a white-space change in Aspect
+ 
+ INC-55 As INC-53, but change Class
+ 
+ 
+ 

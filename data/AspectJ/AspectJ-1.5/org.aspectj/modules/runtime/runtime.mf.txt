@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+
+Name: ignored/see/aspectj5rt/mf
+
+
+
+
+

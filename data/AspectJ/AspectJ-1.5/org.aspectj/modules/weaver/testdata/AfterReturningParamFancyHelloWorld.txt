@@ -1,0 +1,69 @@
+public abstract class FancyHelloWorld extends java.lang.Object:
+  public void <init>():
+                    ALOAD_0     // LFancyHelloWorld; this   (line 7)
+                    INVOKESPECIAL java.lang.Object.<init> ()V
+    constructor-execution(void FancyHelloWorld.<init>())
+    |               RETURN
+    constructor-execution(void FancyHelloWorld.<init>())
+  end public void <init>()
+
+  public static void main(String[]):
+    method-execution(void FancyHelloWorld.main(java.lang.String[]))
+    | field-get(java.io.PrintStream java.lang.System.out)
+    | |             GETSTATIC java.lang.System.out Ljava/io/PrintStream;   (line 9)
+    | |             DUP
+    | |             ASTORE 5
+    | |             ALOAD 5
+    | |             INVOKESTATIC Aspect.ajc_afterReturning_field_get (Ljava/lang/Object;)V
+    | |             NOP
+    | field-get(java.io.PrintStream java.lang.System.out)
+    |               ASTORE_1
+    | finally -> E1
+    | | catch java.lang.Exception -> E0
+    | | |           ALOAD_1     // Ljava/io/PrintStream; out   (line 11)
+    | | |           LDC "bye"
+    | | |           INVOKEVIRTUAL java.io.PrintStream.println (Ljava/lang/String;)V
+    | | |           GOTO L0
+    | | catch java.lang.Exception -> E0
+    | |         E0: ASTORE_2   (line 12)
+    | |             ALOAD_1     // Ljava/io/PrintStream; out   (line 13)
+    | |             ALOAD_2     // Ljava/lang/Exception; e
+    | |             INVOKEVIRTUAL java.io.PrintStream.println (Ljava/lang/Object;)V
+    | finally -> E1
+    |               GOTO L0
+    |           E1: ASTORE 4   (line 14)
+    |               JSR L1
+    |               ALOAD 4
+    |               ATHROW
+    |           L0: JSR L1
+    |               GOTO L2
+    |           L1: ASTORE_3
+    |               ALOAD_1     // Ljava/io/PrintStream; out   (line 15)
+    |               LDC "finally"
+    |               INVOKEVIRTUAL java.io.PrintStream.println (Ljava/lang/String;)V
+    |               RET 3   (line 10)
+    |           L2: RETURN   (line 17)
+    method-execution(void FancyHelloWorld.main(java.lang.String[]))
+  end public static void main(String[])
+
+  public static String getName():
+    method-execution(java.lang.String FancyHelloWorld.getName())
+    |               ICONST_0   (line 20)
+    |               ISTORE_0
+    |               ILOAD_0     // I x   (line 21)
+    |               LDC "name"
+    |               INVOKEVIRTUAL java.lang.String.hashCode ()I
+    |               IADD
+    |               ISTORE_0     // I x
+    |               NEW java.lang.StringBuffer   (line 22)
+    |               DUP
+    |               LDC "name"
+    |               INVOKESPECIAL java.lang.StringBuffer.<init> (Ljava/lang/String;)V
+    |               ILOAD_0     // I x
+    |               INVOKEVIRTUAL java.lang.StringBuffer.append (I)Ljava/lang/StringBuffer;
+    |               INVOKEVIRTUAL java.lang.StringBuffer.toString ()Ljava/lang/String;
+    |               ARETURN
+    method-execution(java.lang.String FancyHelloWorld.getName())
+  end public static String getName()
+
+end public abstract class FancyHelloWorld

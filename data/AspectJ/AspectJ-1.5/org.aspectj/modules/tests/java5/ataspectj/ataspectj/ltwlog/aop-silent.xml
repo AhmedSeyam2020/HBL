@@ -1,0 +1,5 @@
+<aspectj>
+    <aspects>
+        <aspect name="ataspectj.ltwlog.Aspect1"/>
+    </aspects>
+</aspectj>

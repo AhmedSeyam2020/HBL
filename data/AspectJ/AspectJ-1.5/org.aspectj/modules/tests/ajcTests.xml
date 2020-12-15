@@ -1,0 +1,81 @@
+<!DOCTYPE suite SYSTEM "../tests/ajcTestSuite.dtd" [
+<!ENTITY ajc10xTests SYSTEM "../tests/src/org/aspectj/systemtest/ajc10x/ajc10x-tests.xml">
+<!ENTITY ajc11Tests SYSTEM "../tests/src/org/aspectj/systemtest/ajc11/ajc11-tests.xml">
+<!ENTITY ajc120Tests SYSTEM "../tests/src/org/aspectj/systemtest/ajc120/ajc120-tests.xml">
+<!ENTITY ajc121Tests SYSTEM "../tests/src/org/aspectj/systemtest/ajc121/ajc121-tests.xml">
+<!ENTITY aspectpathTests SYSTEM "../tests/src/org/aspectj/systemtest/aspectpath/aspectpath-tests.xml">
+<!ENTITY baseTests SYSTEM "../tests/src/org/aspectj/systemtest/base/baseTests-tests.xml">
+<!ENTITY designTests SYSTEM "../tests/src/org/aspectj/systemtest/design/designtest.xml">
+<!ENTITY incrementalTests SYSTEM "../tests/src/org/aspectj/systemtest/incremental/incremental-tests.xml">
+<!ENTITY inpathTests SYSTEM "../tests/src/org/aspectj/systemtest/inpath/inpath-tests.xml">
+<!ENTITY java14Tests SYSTEM "../tests/src/org/aspectj/systemtest/java14/java14-tests.xml">
+<!ENTITY knownlimitationsTests SYSTEM "../tests/src/org/aspectj/systemtest/knownlimitations/knownLimitations-tests.xml">
+<!ENTITY optionsTests SYSTEM "../tests/src/org/aspectj/systemtest/options/options-tests.xml">
+<!ENTITY pre10xTests SYSTEM "../tests/src/org/aspectj/systemtest/pre10x/pre10x-tests.xml">
+<!ENTITY purejavaTests SYSTEM "../tests/src/org/aspectj/systemtest/purejava/pureJava-tests.xml">
+<!ENTITY serialVerUIDTests SYSTEM "../tests/src/org/aspectj/systemtest/serialVerUID/serialVerUID-tests.xml">
+<!ENTITY xlintTests SYSTEM "../tests/src/org/aspectj/systemtest/xlint/xlint-tests.xml">
+]>
+
+<!--
+  known keywords:
+ 
+  knownLimitation     Accepted limitation of current implementation (fails)
+  purejava            Sources compile under javac as well
+  broken-test         ??
+  messages-vary       one of many (usually two) test specs that differ only in 
+                      messages expected by the different compilers.
+                      Currently ajc 1.0 tests are in ajcTests10.xml,
+                      so there may only be one copy marked "messages-vary" here.
+  new-messages-vary   like messages-vary, except need to make ajcTest10 variant
+
+  fail-{...}          test fails in some configuration
+  fail-unimplmented   eajc throwing "unimplemented" exception
+  fail-commandLine    fails in ajc on command line (move to ajcTestsBroken.xml)
+  fail-in-eclipse     fail when harness in run from inside eclipse
+  fail-publicType     now fixed - no longer presenting error for public type in wrong file
+
+  from-{file}         from original {file}.txt for file in
+                      java, bigjava, resolved_1*, 14tests, errors, design, base... 
+
+  incremental-test    uses inc-compile step
+  command-error       command-line error test
+
+  knownLimitation-ajctaskCompiler
+                      Accepted limitation of the AjcTaskCompilerCommand wrapper
+  knownLimitation-ajdeCompiler
+                      Accepted limitation of the AJDE CompileCommand wrapper
+                      
+  poorErrorMessages   test case passes but errors produced by compiler could do with
+                      improvement                      
+                      
+  Test titles:
+  
+  Titles should be unique and not change, and related tests should have the 
+  same title prefix.  This permits us to automatically compare the test results 
+  from different versions (and suites), and to see related differences together.
+  
+  -->
+
+<suite>     
+
+&baseTests;
+&designTests;
+
+&pre10xTests;
+&ajc10xTests;
+&ajc11Tests;
+&ajc120Tests;
+&ajc121Tests;
+
+&aspectpathTests;
+&incrementalTests;
+&inpathTests;
+&java14Tests;
+&knownlimitationsTests;
+&optionsTests;
+&purejavaTests;
+&serialVerUIDTests;
+&xlintTests;
+
+</suite>

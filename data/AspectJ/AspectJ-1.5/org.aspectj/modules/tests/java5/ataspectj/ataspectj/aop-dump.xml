@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<aspectj>
+	<aspects>
+		<aspect name="ataspectj.EmptyAspect"/>
+	</aspects>
+    <weaver options="-XmessageHandlerClass:ataspectj.TestHelper">
+        <dump within="ataspectj.DumpTestThe*"/> 
+    </weaver>
+</aspectj>

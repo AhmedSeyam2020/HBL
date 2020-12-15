@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<aspectj>
+	<aspects>
+		<aspect name="ataspectj.EmptyAspect"/>
+	</aspects>
+    <weaver>
+<!--    
+        <dump within="*..*Proxy*" beforeandafter="true"/> 
+-->        
+        <dump within="*Proxy*" beforeandafter="true"/> 
+    </weaver>
+</aspectj>

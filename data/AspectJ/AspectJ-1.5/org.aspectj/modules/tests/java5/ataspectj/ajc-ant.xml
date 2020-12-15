@@ -1,0 +1,268 @@
+<!-- ajc-ant script, not to be used from Ant commant line - see AntSpec -->
+<project name="ltw" default="RunThemAllWithJavacCompiledAndLTW">
+
+    <!-- using this we can debug the forked VM -->
+    <property
+        name="jdwp"
+        value="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"/>
+
+    <target name="RunThemAllWithJavacCompiledAndLTW" depends="compile:javac, ltw"/>
+
+    <target name="compile:javac">
+        <!-- compile only javac compilable stuff, exclude the one that needs other dependencies -->
+        <javac destdir="${aj.sandbox}" classpathref="aj.path"
+            srcdir="${basedir}"
+            includes="ataspectj/*"
+            excludes="ataspectj/UnweavableTest.java"
+            debug="true">
+        </javac>
+    </target>
+
+    <target name="ltw">
+        <java fork="yes" classname="ataspectj.AllLTWTests" failonerror="yes">
+            <classpath refid="aj.path"/>
+            <!-- use META-INF/aop.xml style -->
+            <classpath path="ataspectj/pathentry"/>
+            <jvmarg value="-javaagent:${aj.root}/lib/test/loadtime5.jar"/>
+<!--            <jvmarg line="${jdwp}"/>-->
+        </java>
+    </target>
+
+    <target name="ltw.PerClauseTest">
+        <copy file="ataspectj/aop-perclausetest.xml"
+              tofile="${aj.sandbox}/META-INF/aop.xml"/>
+        <java fork="yes" classname="ataspectj.PerClauseTest" failonerror="yes">
+            <classpath refid="aj.path"/>
+            <jvmarg value="-javaagent:${aj.root}/lib/test/loadtime5.jar"/>
+<!--            <jvmarg line="${jdwp}"/>            -->
+        </java>
+    </target>
+
+    <target name="ltw.AroundInlineMungerTest">
+        <copy file="${aj.root}/tests/java5/ataspectj/ataspectj/aop-aroundinlinemungertest.xml"
+              tofile="${aj.sandbox}/META-INF/aop.xml"/>
+        <java fork="yes" classname="ataspectj.AroundInlineMungerTest" failonerror="yes">
+            <classpath refid="aj.path"/>
+            <jvmarg value="-javaagent:${aj.root}/lib/test/loadtime5.jar"/>
+            <!--<jvmarg line="${jdwp}"/>--><!-- uncomment to debug with JDWP -->
+        </java>
+    </target>
+
+    <target name="ltw.AroundInlineMungerTest2">
+        <copy file="${aj.root}/tests/java5/ataspectj/ataspectj/aop-aroundinlinemungertest2.xml"
+              tofile="${aj.sandbox}/META-INF/aop.xml"/>
+        <java fork="yes" classname="ataspectj.AroundInlineMungerTest2" failonerror="yes">
+            <classpath refid="aj.path"/>
+            <jvmarg value="-javaagent:${aj.root}/lib/test/loadtime5.jar"/>
+        </java>
+    </target>
+
+    <target name="ltw.DumpTest">
+        <java fork="yes" classname="ataspectj.DumpTest" failonerror="yes">
+            <classpath refid="aj.path"/>
+            <jvmarg value="-javaagent:${aj.root}/lib/test/loadtime5.jar"/>
+        </java>
+    </target>
+
+    <target name="ltw.DumpProxyTest">
+        <copy file="ataspectj/aop-dumpproxy.xml"
+              tofile="${aj.sandbox}/META-INF/aop.xml"/>
+        <java fork="yes" classname="ataspectj.TestProxyGenerator" failonerror="yes">
+            <classpath refid="aj.path"/>
+            <jvmarg value="-javaagent:${aj.root}/lib/test/loadtime5.jar"/>
+        </java>
+    </target>
+
+    <target name="ltw.Aspect2MainTest">
+        <!-- javac Aspect2 -->
+        <javac destdir="${aj.sandbox}" classpathref="aj.path"
+            srcdir="${basedir}"
+            includes="ataspectj/ltwreweavable/Aspect2.java"
+            debug="true">
+        </javac>
+        <delete dir="${aj.sandbox}" includes="**/Aspect1.class, **/Main.class"/>
+        <copy file="ataspectj/ltwreweavable/aop-ltwreweavable.xml"
+              tofile="${aj.sandbox}/META-INF/aop.xml"/>
+        <java fork="yes" classname="ataspectj.ltwreweavable.Main" failonerror="yes">
+            <classpath refid="aj.path"/>
+            <classpath>
+                <pathelement path="${aj.sandbox}/main1.jar"/>
+            </classpath>
+            <jvmarg value="-javaagent:${aj.root}/lib/test/loadtime5.jar"/>
+        </java>
+    </target>
+
+    <target name="ltwlog.LTWLog">
+        <javac destdir="${aj.sandbox}" classpathref="aj.path"
+            srcdir="${basedir}"
+            includes="ataspectj/ltwlog/*"
+            debug="true">
+        </javac>
+        <copy file="ataspectj/ltwlog/aop-silent.xml"
+              tofile="${aj.sandbox}/META-INF/aop.xml"
+        	  overwrite="yes"	
+        />
+        <java fork="yes" classname="ataspectj.ltwlog.MainSilent" failonerror="yes">
+            <classpath refid="aj.path"/>
+            <jvmarg value="-javaagent:${aj.root}/lib/test/loadtime5.jar"/>
+        </java>
+        <copy file="ataspectj/ltwlog/aop-verbsoe.xml"
+              tofile="${aj.sandbox}/META-INF/aop.xml"
+        	  overwrite="yes"	
+        />
+        <java fork="yes" classname="ataspectj.ltwlog.MainVerbose" failonerror="yes">
+            <classpath refid="aj.path"/>
+            <jvmarg value="-javaagent:${aj.root}/lib/test/loadtime5.jar"/>
+        </java>
+        <copy file="ataspectj/ltwlog/aop-verboseandshow.xml"
+              tofile="${aj.sandbox}/META-INF/aop.xml"
+		  	  overwrite="yes"	
+		/>
+        <java fork="yes" classname="ataspectj.ltwlog.MainVerboseAndShow" failonerror="yes">
+            <classpath refid="aj.path"/>
+            <jvmarg value="-javaagent:${aj.root}/lib/test/loadtime5.jar"/>
+        </java>
+    </target>
+
+    <target name="ltw.Unweavable">
+        <javac destdir="${aj.sandbox}"
+            srcdir="${basedir}"
+            includes="ataspectj/UnweavableTest.java, ataspectj/TestHelper.java"
+            debug="true">
+            <classpath>
+                <path refid="aj.path"/>
+                <pathelement path="${aj.root}/lib/asm/asm-2.0.jar"/>
+            </classpath>
+        </javac>
+        <copy file="ataspectj/aop-unweavabletest.xml"
+              tofile="${aj.sandbox}/META-INF/aop.xml"/>
+        <java fork="yes" classname="ataspectj.UnweavableTest" failonerror="yes">
+            <classpath>
+                <path refid="aj.path"/>
+                <pathelement path="${aj.root}/lib/asm/asm-2.0.jar"/>
+            </classpath>
+            <jvmarg value="-javaagent:${aj.root}/lib/test/loadtime5.jar"/>
+        </java>
+    </target>
+
+    <target name="ltw.Decp">
+        <copy file="ataspectj/aop-decptest.xml"
+              tofile="${aj.sandbox}/META-INF/aop.xml"
+        	  overwrite="yes"	
+        />
+        <java fork="yes" classname="ataspectj.DeclareParentsInterfaceTest" failonerror="yes">
+            <classpath>
+                <path refid="aj.path"/>
+            </classpath>
+            <jvmarg value="-javaagent:${aj.root}/lib/test/loadtime5.jar"/>
+        </java>
+
+        <copy file="ataspectj/aop-decptest.xml"
+              tofile="${aj.sandbox}/META-INF/aop.xml"
+        	  overwrite="yes"	
+        />
+    	<java fork="yes" classname="ataspectj.DeclareParentsImplementsTest" failonerror="yes">
+            <classpath>
+                <path refid="aj.path"/>
+            </classpath>
+            <jvmarg value="-javaagent:${aj.root}/lib/test/loadtime5.jar"/>
+        </java>
+    </target>
+
+    <target name="ltw.Decp2">
+        <!-- javac compile the 2nd aspect -->
+        <javac destdir="${aj.sandbox}"
+            srcdir="${basedir}"
+            includes="ataspectj/DeclareParentsImplementsReweavableTestAspect.java"
+            debug="true">
+            <classpath>
+                <path refid="aj.path"/>
+            </classpath>
+        </javac>
+
+        <copy file="ataspectj/aop-decptest2.xml"
+              tofile="${aj.sandbox}/META-INF/aop.xml"/>
+        <java fork="yes" classname="ataspectj.DeclareParentsImplementsReweavableTest" failonerror="yes">
+            <classpath>
+                <path refid="aj.path"/>
+            </classpath>
+            <jvmarg value="-javaagent:${aj.root}/lib/test/loadtime5.jar"/>
+        </java>
+    </target>
+
+    <target name="Compile time aspects declared to ltw weaver">
+        <!--Aspects woven at compile time must be declared in an aop.xml file.
+        If they are not declared, then they will be lost during reweaving-->
+
+        <!--First test that the error is produced if the declaration is not made-->
+        <copy file="ataspectj/ltwreweavable/aop-ltwreweavable-declared.xml"
+              tofile="${aj.sandbox}/META-INF/aop.xml"/>
+        <java fork="yes" classname="ataspectj.ltwreweavable.MainReweavableLogging" failonerror="yes">
+            <classpath refid="aj.path"/>
+            <classpath>
+                <pathelement path="${aj.sandbox}/main1.jar"/>
+            </classpath>
+            <jvmarg value="-javaagent:${aj.root}/lib/test/loadtime5.jar"/>
+            <jvmarg value="-DaspectDeclared=true"/>
+        </java>
+        <!--Now ensure that the error is not produced when the declaration is made.-->
+        <copy file="ataspectj/ltwreweavable/aop-ltwreweavable-omitted.xml"
+              tofile="${aj.sandbox}/META-INF/aop.xml"
+        	  overwrite="yes"/>
+        <java fork="yes" classname="ataspectj.ltwreweavable.MainReweavableLogging" failonerror="yes">
+            <classpath refid="aj.path"/>
+            <classpath>
+                <pathelement path="${aj.sandbox}/main1.jar"/>
+            </classpath>
+            <jvmarg value="-javaagent:${aj.root}/lib/test/loadtime5.jar"/>
+            <jvmarg value="-DaspectDeclared=false"/>
+        </java>
+    </target>
+
+    <target name="ltw.AppContainer">
+        <!-- mkdir the 2 sub app root folder -->
+        <mkdir dir="${aj.sandbox}/META-INF"/>
+        <mkdir dir="${aj.sandbox}/app_1"/>
+        <mkdir dir="${aj.sandbox}/app_1/META-INF"/>
+        <!-- install sub app -->
+        <copy todir="${aj.sandbox}/app_1">
+            <fileset dir="${aj.sandbox}" includes="ataspectj/hierarchy/app/*"/>
+        </copy>
+        <copy todir="${aj.sandbox}/app_2">
+            <fileset dir="${aj.sandbox}" includes="ataspectj/hierarchy/app/*"/>
+        </copy>
+        <delete dir="${aj.sandbox}/ataspectj/hierarchy/app"/>
+        <!-- install the aop.xml DD -->
+        <copy file="${aj.root}/tests/java5/ataspectj/ataspectj/hierarchy/aop-global.xml"
+              tofile="${aj.sandbox}/META-INF/aop.xml"/>
+        <!-- only app1 gets local aspect -->
+        <copy file="${aj.root}/tests/java5/ataspectj/ataspectj/hierarchy/aop-local.xml"
+              tofile="${aj.sandbox}/app_1/META-INF/aop.xml"/>
+        <!-- run -->
+        <java fork="yes" classname="ataspectj.hierarchy.AppContainerTest" failonerror="yes">
+            <classpath refid="aj.path"/>
+            <jvmarg value="-javaagent:${aj.root}/lib/test/loadtime5.jar"/>
+            <jvmarg value="-Daj.weaving.verbose=true"/>
+        </java>
+    </target>
+
+    <target name="Duplicate JVMTI agents">
+        <copy file="${aj.root}/tests/java5/ataspectj/aop-messagehandler.xml"
+              tofile="${aj.sandbox}/META-INF/aop.xml"/>
+        <java fork="yes" classname="HelloWorld" failonerror="yes">
+            <classpath refid="aj.path"/>
+            <!-- use META-INF/aop.xml style -->
+            <classpath>
+                <pathelement path="${aj.sandbox}/aspects.jar"/>
+            </classpath>
+            <jvmarg value="-javaagent:${aj.root}/lib/test/loadtime5.jar"/>
+<!--        	
+-->            
+            <jvmarg value="-javaagent:${aj.root}/lib/test/loadtime5.jar"/>
+            <jvmarg value="-Daj.weaving.verbose=true"/>
+            <jvmarg value="-Djava.util.logging.config.file=${aj.root}/weaver5/testdata/logging.properties"/>
+<!--            <jvmarg line="${jdwp}"/>-->
+        </java>
+    </target>
+
+</project>

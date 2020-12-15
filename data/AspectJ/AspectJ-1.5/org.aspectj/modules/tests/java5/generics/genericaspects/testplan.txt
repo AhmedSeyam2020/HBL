@@ -1,0 +1,74 @@
+Test plan for abstract aspects:
+
+Coverage:
+  * all pointcut types
+  * all declare types
+  * all annotation pattern nodes
+  * all type pattern nodes
+  * type variables as type parameters
+  
+  * Binary weaving!!!
+  
+Pointcut types:
+
+  * test declare warning with :                DONE
+    - KindedPointcut
+       all parts of Signature pattern
+    - HandlerPointcut
+    - ReferencePointcut
+    - WithincodePointcut
+    - WithinPointcut
+    - And
+    - Or
+    - Not
+    
+  * test before advice with                    DONE
+    - CflowPointcut
+    - annotation
+    - args annotation
+    - args
+    - this
+    - target
+    - @this
+    - @target
+    - @within
+    - @withincode
+    - parameter binding
+    
+  * pointcut in generic class                  DONE
+    - ref with parameterized type
+    - ref without parameterized type (error)
+    
+Declares:
+
+  * declare warning / error (covered above)  DONE
+  * declare parents                          DONE
+  * declare soft                             DONE
+  * declare precedence                       DONE
+  * declare @type	                         DONE
+  * declare @field / method / cons           DONE
+  
+AnnotationPatternNodes:
+
+  * And
+  * Or
+  * Not
+  * Exact 
+  * Wild
+
+Type pattern Nodes:
+
+  * And
+  * AnyWithAnnotation
+  * Or
+  * Not
+  * HasMember
+  * Exact
+  * Wild
+  * type variables as type parameters         DONE
+
+Multi-level hierarchy:                        DONE
+
+  * test 3-deep with partial parameterization in middle
+  
+  

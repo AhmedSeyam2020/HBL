@@ -1,0 +1,80 @@
+<!-- ajc-ant script, not to be used from Ant commant line - see AntSpec -->
+<project name="tracing">
+
+    <!-- using this we can debug the forked VM -->
+    <property
+        name="jdwp"
+        value="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"/>
+
+    <target name="Tracing">
+        <java fork="yes" classname="TracingTest" failonerror="yes">
+            <classpath refid="aj.path"/>
+            <!-- use META-INF/aop.xml style -->
+<!--            <jvmarg value="-javaagent:${aj.root}/lib/test/loadtime5.jar"/>-->
+<!--            <jvmarg line="${jdwp}"/>-->
+        </java>
+    </target>
+
+    <target name="Default tracing">
+        <java fork="yes" classname="DefaultTracingTest" failonerror="yes">
+            <classpath refid="aj.path"/>
+            <!-- use META-INF/aop.xml style -->
+<!--            <jvmarg value="-javaagent:${aj.root}/lib/test/loadtime5.jar"/>-->
+<!--            <jvmarg line="${jdwp}"/>-->
+        </java>
+    </target>
+
+    <target name="Trace messages">
+        <copy file="${aj.root}/tests/tracing/aop-tracemessages.xml"
+              tofile="${aj.sandbox}/META-INF/aop.xml"/>
+        <java fork="yes" classname="HelloWorld" failonerror="yes">
+            <classpath refid="aj.path"/>
+            <jvmarg value="-Dorg.aspectj.tracing.factory=default"/>
+            <jvmarg value="-Dorg.aspectj.tracing.messages=true"/>
+            <!-- use META-INF/aop.xml style -->
+            <jvmarg value="-javaagent:${aj.root}/lib/test/loadtime5.jar"/>
+<!--            <jvmarg line="${jdwp}"/>-->
+        </java>
+    </target>
+
+    <target name="Trace everything">
+        <java fork="yes" classname="HelloWorld" failonerror="yes">
+            <classpath refid="aj.path"/>
+            <jvmarg value="-Dorg.aspectj.tracing.enabled=true"/>
+            <jvmarg value="-Dorg.aspectj.tracing.factory=default"/>
+            <jvmarg value="-Dorg.aspectj.tracing.messages=true"/>
+<!--            <jvmarg value="-verbose:class"/>-->
+            <!-- use META-INF/aop.xml style -->
+            <jvmarg value="-javaagent:${aj.root}/lib/test/loadtime5.jar"/>
+<!--            <jvmarg line="${jdwp}"/>-->
+        </java>
+    </target>
+
+    <target name="JDK 1.4 tracing">
+        <copy file="${aj.root}/tests/tracing//logging.properties"
+              tofile="${aj.sandbox}/META-INF/logging.properties"/>
+        <java fork="yes" classname="HelloWorld" failonerror="yes">
+            <classpath refid="aj.path"/>
+            <jvmarg value="-Dorg.aspectj.tracing.debug=true"/>
+            <jvmarg value="-Djava.util.logging.config.file=logging.properties"/>
+            <!-- use META-INF/aop.xml style -->
+            <jvmarg value="-javaagent:${aj.root}/lib/test/loadtime5.jar"/>
+<!--            <jvmarg line="${jdwp}"/>-->
+        </java>
+    </target>
+
+    <target name="Tracing file System Property">
+        <java fork="yes" classname="HelloWorld" failonerror="yes">
+            <classpath refid="aj.path"/>
+            <jvmarg value="-Dorg.aspectj.tracing.enabled=true"/>
+            <jvmarg value="-Dorg.aspectj.tracing.factory=default"/>
+            <jvmarg value="-Dorg.aspectj.tracing.messages=true"/>
+        	<sysproperty key="org.aspectj.tracing.file" path="${aj.sandbox}/tracing.txt"/>
+<!--            <jvmarg value="-verbose:class"/>-->
+            <!-- use META-INF/aop.xml style -->
+            <jvmarg value="-javaagent:${aj.root}/lib/test/loadtime5.jar"/>
+<!--            <jvmarg line="${jdwp}"/>-->
+        </java>
+    </target>
+
+</project>

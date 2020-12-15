@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://sswww.aspectj.org/dtd/aspectj_1_5_0.dtd">
+<aspectj>
+    <weaver options="-showWeaveInfo">
+        <include within="foo..bar.Goo+"/>
+        <dump within="foo..*" beforeandafter="true"/>
+    </weaver>
+    <aspects>
+        <exclude within="@Baz"/>
+        <include within="@Whoo"/>
+        <aspect name="test.Aspect"/>
+    </aspects>
+</aspectj>

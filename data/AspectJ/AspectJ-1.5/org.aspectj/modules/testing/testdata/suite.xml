@@ -1,0 +1,22 @@
+
+<!DOCTYPE suite SYSTEM "../../tests/ajcTestSuite.dtd">
+
+<suite>
+<!--correct behavior for 1.0 is good error message, see real test in knownbugs-->
+<ajc-test title="harness error test"
+          dir="harness" pr="9998">
+<compile files="ErrorTest.java">
+<message kind="error" line="5"/>
+<message kind="error" line="6"/>
+</compile>
+</ajc-test>
+
+
+<ajc-test title="harness test with run"
+          dir="harness" pr="101">
+<compile files="TestNoTester.java"/>
+<run class="TestNoTester"/>
+</ajc-test>
+
+
+</suite>
